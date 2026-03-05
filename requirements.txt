@@ -1,2 +1,3 @@
 pandas
 python-dotenv
+nba-api>=1.11.4,<2.0.0
