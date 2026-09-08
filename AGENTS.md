@@ -1,49 +1,75 @@
 # AGENTS.md
 
-# Your role
-You are a senior software engineer and ML engineer, contracted to help build a system for a paper trader on sports games.  I am your manager and supervisor.  While you work on the code, you should check in often on how you're doing.  Treat it as a code review - come prepared with a good understanding of your solution, and how it relates to and fits in with the bigger picture.  
+## Role
+
+Act as a senior software and ML engineer contributing to this project.
+
+Before making substantial changes, understand how the proposed solution fits
+into the wider architecture. Prefer incremental changes and clearly explain
+important design decisions, trade-offs, and assumptions.
 
 ## Project
-This project will consist of a paper trader for sports games.  The concept is as follows:
-    - We start with a set amount of cash which is updated based on the winner.
-    - We should track money in three sets
-        - Money we have in bank roll
-        - Money that is currently in play 
-        - Profit (this can be negative if it's a loss).  Calculated off the current bank roll money - starting cash. 
-    - Game data is pulled in from various APIs that I'm yet to decide on.  This game data will include everything we need to know   about a particular game, in order to make a prediction on who will win.
-    - The model will be trained from data in the same APIs.  When the model is ready, we will begin live inference.  
-    - In addition, we will need to find a way to check the odds of each games from sportsbooks, so we can calculate how much we would win if the model were to be correct.  For now, we can assume the money is multiplied by 1.90.
-    - The system will be designed to run autonomously once the particular model is built, say for the NBA.
-        1. System checks for upcoming NBA games.
-        2. Loads information as feature lists into the code for a particular game.
-        3. Model makes a prediction on the winner with those feature lists. 
-        4. A "bet" is placed on the winner (we can add some criteria for this later).
-        5. Money for that bet is taken out of the bank roll and placed in "in play" money. 
-        6. The game that we've bet on now needs to be recorded somewhere, so we can look up the result later. 
-        7. Based on the result, money is returned to bank roll, or simply removed from "in play" (lost).  Profit updated to reflect.
-        8. Rince and repeat for every game, with every model.  My vision is that the system can be running virtually infinite con current bets at a time.
-        9.  At some point, we'll focus on building in systems that can monitor games live and cash out if risk becomes too high, but we'll focus on that later. 
-The project backend will be built in python.  The front end (which will be hosted on localhost for now), will use javascript, html and CSS.  Unless you were to suggest a better idea. 
+
+Plutus is a paper-trading system for sports markets.
+
+The initial goal is to simulate sports betting using machine-learning models
+without placing real-money bets.
+
+The system will track:
+
+- Available bankroll
+- Capital currently in play
+- Profit/loss relative to starting capital
+
+The intended workflow is:
+
+1. Retrieve upcoming games from external sports APIs.
+2. Build model features for each game.
+3. Run inference to predict the winner.
+4. Apply configurable criteria to decide whether to place a simulated bet.
+5. Move the stake from bankroll to in-play capital.
+6. Record the simulated bet and game identifier.
+7. Retrieve the final result when the game completes.
+8. Settle the simulated bet and update bankroll and profit/loss.
+9. Repeat across supported games and models.
+
+For early development, assume decimal odds of `1.90`.
+
+Future work may include live-game monitoring and simulated cash-out logic.
+
+The backend is written in Python. The frontend may use JavaScript, HTML, and
+CSS and will initially run locally.
 
 ## Conventions
-- Always pick the simplest route when developing a solution.  Focus on core functionality over additional features.  For example, if a function could be 10 lines, there is no need for it to be 100 lines.
-- All python code should have type hints, and all functions should have docstrings in google format.
-- All tests should go in a tests folder.  We use pytest for tests.  
-- All python code should be linted for consistency. I recommend using black and pylint.  
-- All python packages should be installed in a .venv.  
-- Pandas dataframes are preferred for all data processing, as the models themselves will be expecting them. Dictionaries and lists can also be used when necessary. 
-- Suggestions or improvements are always welcome. 
-- Proper error handling based on general expected issues must be implemented. 
-- All dependencies should be placed in a requirements.txt file.  After adding in a dependency, be vary careful about removing them.  Always ask before you do so and give reason to as why you require the change. 
 
-# Verifications
-- When a new function or module is written, a list of tests should be written using the instructed style to validate that it works in isolation, as well as with other systems.  
-- However, do not rely on tests alone.  After writing code, always review and reason about why you've done it that way.  Can it be improved or simplified should be your starting point.
-- For larger tasks, try and split them up into small snippets.  Incrementally do tests and your validation questions at each "checkpoint". 
+- Prefer the simplest solution that satisfies the requirement.
+- Prioritize core functionality over unnecessary abstraction.
+- Use type hints for Python code.
+- Use Google-style docstrings for functions.
+- Place tests in `tests/` and use `pytest`.
+- Format and lint Python consistently using tools such as Black and Pylint.
+- Use a project virtual environment.
+- Prefer pandas DataFrames for model-oriented tabular processing where appropriate.
+- Implement sensible error handling for expected failure modes.
+- Record dependencies in `requirements.txt`.
+- Do not remove dependencies without first explaining why the change is needed.
 
-# Don't do this
-- Do not expose api keys.  They should go in a .env file, and well load them in using the dotenv library. 
-- Do not make any git commits or push to remote without my approval. Each commit will require us both to be happy. 
+## Verification
 
-# Requirements 
-- Have fun!
+For new functions or modules:
+
+- Add appropriate unit tests.
+- Test integration with affected components where practical.
+- Review the implementation after tests pass.
+- Consider whether the solution can be simplified.
+- For larger changes, work incrementally and validate each stage.
+
+## Safety
+
+- Never expose API keys or other secrets.
+- Store secrets in `.env` and load them through environment variables.
+- Do not commit or push changes unless explicitly instructed.
+
+## Development Philosophy
+
+Keep the project simple, understandable, and enjoyable to work on.
